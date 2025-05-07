@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "../../stores/auth";
 
 export const client = axios.create({
     baseURL: `https://${import.meta.env.VITE_API_BASE_URL}.mokky.dev`,
@@ -16,3 +17,14 @@ client.interceptors.request.use((config) => {
 
   return config;
 })
+
+client.interceptors.response.use(
+  (responce) => responce,
+  async (error) => {
+    if(error.responce?.status === 401) {
+      useAuthStore.getState().logout();
+      window.location.href = '/auth'
+    }
+    return Promise.reject(error);
+  }
+)

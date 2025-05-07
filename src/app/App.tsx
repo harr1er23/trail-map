@@ -1,9 +1,11 @@
 import '@mantine/core/styles.css';
 import { createTheme, MantineProvider, type MantineColorsTuple } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
+import { ToastContainer } from 'react-toastify';
 
 import "./index.scss";
 import { AppRouter } from './router';
+import { useAuthStore } from '../stores/auth';
+import React from 'react';
 
 const myColor: MantineColorsTuple = [
   '#f1f1ff',
@@ -26,10 +28,15 @@ const theme = createTheme({
 });
 
 function App() {
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+
+  React.useEffect(() => {
+    checkAuth();
+  }, [checkAuth])
 
   return (
     <MantineProvider theme={theme}>
-    <Notifications position="top-right" />
+    <ToastContainer />
     <AppRouter />
     </MantineProvider>
   )
