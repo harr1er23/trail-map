@@ -4,8 +4,10 @@ import { FormLoginSchema, type TFormLoginValue } from "../lib/schema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, PasswordInput, TextInput } from "@mantine/core";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
+    const navigate = useNavigate();
     const { login } = useAuthStore();
     const form = useForm<TFormLoginValue>({
         resolver: zodResolver(FormLoginSchema),
@@ -18,8 +20,8 @@ export const LoginForm = () => {
     const onSubmit = async (data: TFormLoginValue) => {
         try {
             await login(data.email, data.pass);
-
             toast.success("Авторизация успешна!");
+            navigate('/map');
         } catch(err) {
             console.error(err);
             toast.error("Ошибка авторизации! Проверьте данные для входа.");

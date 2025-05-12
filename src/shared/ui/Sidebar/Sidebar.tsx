@@ -2,6 +2,7 @@ import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import classes from './sidebar.module.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { Map, LogOut, Plane, Calendar, User, Settings } from 'lucide-react';
+import { useAuthStore } from '../../../stores/auth';
 
 interface NavbarLinkProps {
   icon: typeof Map;
@@ -36,6 +37,7 @@ const mockdata = [
 ];
 
 export function Sidebar() {
+  const { logout } = useAuthStore();
   const location = useLocation();
   const currentPath = location.pathname.split('/')[1];
 
@@ -61,7 +63,8 @@ export function Sidebar() {
       </div>
 
       <Stack justify="center" className='mt-auto' gap={0}>
-        <NavbarLink 
+        <NavbarLink
+          onClick={logout} 
           icon={LogOut} 
           label="Logout" />
       </Stack>

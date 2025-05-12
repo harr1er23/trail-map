@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 type AuthStore = {
     user: null | User;
     token: null | string;
-    checkAuth: () => Promise<void>;
+    checkAuth: () => Promise<boolean>;
     login: (email: string, pass: string) => Promise<void>;
     registration: (email: string, name: string, pass: string) => Promise<void>;
     logout: () => void;
@@ -35,20 +35,23 @@ export const useAuthStore = create<AuthStore>((set) => ({
     logout: () => {
         set({ user: null, token: null });
         localStorage.removeItem('token');
+        window.location.href = '/auth'
     },
     checkAuth: async () => {
         const token = localStorage.getItem('token');
 
-        if(!token) return;
-
+        if(!token) return false;
+        
         try {
-            const { data, token } = await authApi.checkAuth();
-            set({ user: data, token});
+            const { data} = await authApi.checkAuth();
+            set({ user: data, token: token });
+            return true;
         } catch(error) {
             console.error('ERROR [CHECK_AUTH]', error);
             toast.error('Сессия истекла! Пожалуйста, войдите снова.');
             localStorage.removeItem('token');
-            set({ user: null, token: null })
+            set({ user: null, token: null });
+            return false;
         }
     }
 }))

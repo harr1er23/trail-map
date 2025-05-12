@@ -1,11 +1,11 @@
-import '@mantine/core/styles.css';
 import { createTheme, MantineProvider, type MantineColorsTuple } from '@mantine/core';
 import { ToastContainer } from 'react-toastify';
 
 import "./index.scss";
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+
 import { AppRouter } from './router';
-import { useAuthStore } from '../stores/auth';
-import React from 'react';
 
 const myColor: MantineColorsTuple = [
   '#f1f1ff',
@@ -28,12 +28,6 @@ const theme = createTheme({
 });
 
 function App() {
-  const checkAuth = useAuthStore((state) => state.checkAuth);
-
-  React.useEffect(() => {
-    checkAuth();
-  }, [checkAuth])
-
   return (
     <MantineProvider theme={theme}>
     <ToastContainer />
