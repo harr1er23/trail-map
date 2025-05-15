@@ -47,6 +47,7 @@ export const AppRouter = () => {
                 
                 <Route path="/notFound" element={<NotFound />}></Route>
                 <Route path="*" element={<Navigate to="/notFound" replace/>}></Route>
+                <Route path="/" element={<Navigate to="/map" replace/>}></Route>
             </Routes>
             </Suspense>
         </BrowserRouter>

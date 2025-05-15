@@ -16,7 +16,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     user: null,
     token: null,
     login: async (email, pass) => {
-        console.log(email, pass)
         try {
             const { token, data } = await authApi.login({ email, pass });
             localStorage.setItem('token', token);
