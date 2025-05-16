@@ -15,7 +15,7 @@ const MapPage = () => {
   const { journeys, fetchJourneys } = useJourneysStore();
 
   React.useEffect(() => {
-    fetchJourneys();
+    fetchJourneys(1);
   }, [])
 
   async function handleClose() {

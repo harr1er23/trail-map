@@ -97,6 +97,7 @@ const JourneyForm: React.FC<JourneyForm> = ({ close }) => {
                 country: form.getValues('country'),
                 id: journey.id,
                 date: date,
+                publicLink: journey.publicLink,
                 description: form.getValues('description'),
                 coords: form.getValues('coords'),
                 image: form.getValues('image'),
