@@ -19,6 +19,7 @@ interface JourneyModalStore {
     createJourney: (date: JourneyDTO) => Promise<Journey>;
     updateJourney: (data: Journey) => Promise<void>;
     removeJourney: (id: number) => Promise<void>;
+    publicJourney: (data: Journey) => Promise<number>;
 }
 
 export const useJourneyModalStore = create<JourneyModalStore>((set) => ({
@@ -63,6 +64,19 @@ export const useJourneyModalStore = create<JourneyModalStore>((set) => ({
             set({ journey: null })
         } catch(err) {
             console.error('EROR [REMOVE_JOURNEY]', err);
+            set({ error: true })
+            throw err;
+        } finally {
+            set({ loading: false })
+        }
+    },
+    publicJourney: async (data) => {
+        try {
+            set({ loading: true, error: false });
+            const resp = await client.post('/publicJourneys', data);
+            return resp.data.id;
+        } catch(err) {
+            console.error('EROR [PUBLISH_JOURNEY]', err);
             set({ error: true })
             throw err;
         } finally {

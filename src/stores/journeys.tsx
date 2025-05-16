@@ -26,7 +26,8 @@ export const useJourneysStore = create<JourneysState>((set) => ({
             if(!user) {
                 throw new Error("User not authenticated");
             }
-            const { data } = await client.get(`/journeys?user_id=${user.id}&page=${page}&limit=15`);
+            const pageUrl = page ? `&page=${page}&limit=15` : '&page=1';
+            const { data } = await client.get(`/journeys?user_id=${user.id}${pageUrl}`);
             set({journeys: data.items, totalPage: data.meta.total_pages});
         } catch (err) {
             console.error(err);

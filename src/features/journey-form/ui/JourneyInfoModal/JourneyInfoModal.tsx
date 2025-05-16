@@ -3,15 +3,23 @@ import { Placemark } from '@pbe/react-yandex-maps';
 import { Button, Image, Textarea, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useJourneyModalStore } from '../../../../stores/journey-modal';
-import { Send } from 'lucide-react';
+import { Eye, Send } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const JourneyInfoModal = () => {
-    const { journey } = useJourneyModalStore();
-      
+    const navigate = useNavigate();
+    const { journey, updateJourney, publicJourney } = useJourneyModalStore();  
+
     async function onClickShare() {
         try {
             if(!journey) return;
-            console.log('Отправка запроса на смену флага' + journey.id)
+            const publicId = await publicJourney(journey);
+            await updateJourney({
+                ...journey,
+                publicLink: `/journey/${publicId}/public`
+            });
+            toast.success('Ваше путешествие опубликовано!');
         } catch(err) {
             console.log(err);
         }
@@ -64,8 +72,10 @@ const JourneyInfoModal = () => {
                 autosize
             />
 
-            <Button onClick={onClickShare} variant='light'>Share <Send className='self-center ml-2' size={15}/></Button>
-
+            <div className='flex justify-start gap-3'>
+                <Button onClick={journey && journey.publicLink ? undefined : onClickShare} variant='light'>{journey && journey.publicLink ? 'Shared' : 'Share'} <Send className='self-center ml-2' size={15}/></Button>
+                {journey && journey.publicLink && <Button onClick={() => navigate(journey.publicLink)} variant='light'>Check <Eye size={15}/></Button>}
+            </div>
             {/* <Carousel
                 withIndicators
                 emblaOptions={{ loop: true }}

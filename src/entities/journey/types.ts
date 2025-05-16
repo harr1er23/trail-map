@@ -6,4 +6,5 @@ export interface Journey {
     image?: string;
     date: [string | null, string | null];
     coords: [number, number];
+    publicLink: string;
 }
