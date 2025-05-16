@@ -42,8 +42,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
         if(!token) return false;
         
         try {
-            const { data} = await authApi.checkAuth();
-            set({ user: data, token: token });
+            const resp = await authApi.checkAuth();
+            console.log(resp);
+            set({ user: resp, token: token });
             return true;
         } catch(error) {
             console.error('ERROR [CHECK_AUTH]', error);

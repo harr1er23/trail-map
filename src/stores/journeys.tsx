@@ -1,25 +1,33 @@
 import { create } from "zustand";
 import { client } from "../shared/api/client";
 import type { Journey } from "../entities/journey/types";
+import { useAuthStore } from "./auth";
 
 interface JourneysState {
     journeys: Journey[];
     error: boolean;
+    totalPage: number;
     loading: boolean;
-    fetchJourneys: () => Promise<void>;
+    fetchJourneys: (page: number) => Promise<void>;
     addJourney: (journey: Journey) => void;
     removeJourney: (id: number) => void;
 }
 
 export const useJourneysStore = create<JourneysState>((set) => ({
     journeys: [],
+    totalPage: 1,
     error: false,
-    loading: true,
-    fetchJourneys: async () => {
+    loading: false,
+    fetchJourneys: async (page) => {
         try {
             set({ loading: true, error: false });
-            const { data } = await client.get('/journeys');
-            set({journeys: data});
+            const { user } = useAuthStore.getState();
+            
+            if(!user) {
+                throw new Error("User not authenticated");
+            }
+            const { data } = await client.get(`/journeys?user_id=${user.id}&page=${page}&limit=15`);
+            set({journeys: data.items, totalPage: data.meta.total_pages});
         } catch (err) {
             console.error(err);
             set({ error: true })

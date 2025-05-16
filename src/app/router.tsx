@@ -3,6 +3,7 @@ import React, { lazy, Suspense, type JSX } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuthStore } from "../stores/auth";
 import ProfilePage from "../pages/profile/ProfilePage";
+import PublicJourneyPage from "../pages/public-journey/PublicJourneyPage";
 
 const AuthPage = lazy(() => import('../pages/auth/AuthPage'))
 const JourneysPage = lazy(() => import('../pages/journeys/JourneysPage'))
@@ -44,6 +45,7 @@ export const AppRouter = () => {
                 <Route path="/map" element={<PrivateRoute><MapPage /></PrivateRoute>}></Route>
                 <Route path="/journeys" element={<PrivateRoute><JourneysPage /></PrivateRoute>}></Route>
                 <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>}></Route>
+                <Route path="/journey/:id/public" element={<PublicJourneyPage />}/>
                 
                 <Route path="/notFound" element={<NotFound />}></Route>
                 <Route path="*" element={<Navigate to="/notFound" replace/>}></Route>

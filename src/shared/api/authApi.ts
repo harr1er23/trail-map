@@ -17,6 +17,12 @@ type RegisterRequest = {
     pass: string;
 }
 
+type CheckAuthResponse = {
+    id: number;
+    email: string;
+    name: string;
+}
+
 export const authApi = {
     login: async (data: LoginRequest): Promise<AuthResponse> => {
         const resp = await client.post(`/auth`, {
@@ -33,7 +39,7 @@ export const authApi = {
         });
         return resp.data;
     },
-    checkAuth: async (): Promise<AuthResponse> => {
+    checkAuth: async (): Promise<CheckAuthResponse> => {
         const response = await client.get('/auth_me');
         return response.data;
     }

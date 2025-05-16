@@ -1,18 +1,22 @@
 import YandexMap from '../../../../shared/ui/YandexMap/YandexMap';
 import { Placemark } from '@pbe/react-yandex-maps';
-import { Textarea, TextInput } from '@mantine/core';
+import { Button, Image, Textarea, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useJourneyModalStore } from '../../../../stores/journey-modal';
+import { Send } from 'lucide-react';
 
 const JourneyInfoModal = () => {
     const { journey } = useJourneyModalStore();
-    
-    // const slides = journey?.images && journey?.images.map((url) => (
-    //     <Carousel.Slide key={url}>
-    //       <Image src={url} height={220} />
-    //     </Carousel.Slide>
-    // ));
       
+    async function onClickShare() {
+        try {
+            if(!journey) return;
+            console.log('Отправка запроса на смену флага' + journey.id)
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     return (
         <div className='flex flex-col gap-3 w-full'>
             <div className='w-[400px] h-[20vh] rounded-2xl'>
@@ -50,6 +54,7 @@ const JourneyInfoModal = () => {
 
             <DatePicker value={journey?.date} type="range" unselectable='on' minDate={journey?.date[0] ?? ''} maxDate={journey?.date[1] ?? ''}/>
 
+            <Image src={journey?.image} />
 
             <Textarea
                 readOnly
@@ -58,6 +63,8 @@ const JourneyInfoModal = () => {
                 label="Описание поездки"
                 autosize
             />
+
+            <Button onClick={onClickShare} variant='light'>Share <Send className='self-center ml-2' size={15}/></Button>
 
             {/* <Carousel
                 withIndicators
